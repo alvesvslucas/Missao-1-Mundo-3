@@ -1,0 +1,26 @@
+name: Compilar exercícios Java 17
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Compilar CadastroPOO sem executar dados binários
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/cadastropoo"
+          find CadastroPOO/src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d "$RUNNER_TEMP/cadastropoo"
+      - name: Compilar CadastroPOO2 em saída independente
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/cadastropoo2"
+          find CadastroPOO2/src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d "$RUNNER_TEMP/cadastropoo2"
